@@ -36,7 +36,7 @@ export const router = createBrowserRouter([
   {
     Component: withAuth(
       DashboardLayout,
-      (role.admin as TRole) || (role.superAdmin as TRole)
+      (role.admin as TRole) && (role.superAdmin as TRole)
     ),
     path: "/admin",
     children: [

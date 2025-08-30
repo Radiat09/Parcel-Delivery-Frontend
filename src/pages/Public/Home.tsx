@@ -6,7 +6,7 @@ const Home: React.FC = () => {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Hero Section */}
-      <section className="py-40 text-primary-foreground bg-gradient-to-r from-primary to-chart-3">
+      <section className="py-40 text-primary-foreground bg-gradient-to-r from-primary to-chart-3/70">
         <div className="container mx-auto px-4 flex flex-col items-center">
           <h1 className="text-4xl md:text-6xl font-bold text-center mb-6">
             Fast & Reliable Parcel Delivery
@@ -73,7 +73,7 @@ const Home: React.FC = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 my-20 bg-chart-2">
+      <section className="py-40 bg-primary/70">
         <div className="container mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold mb-6 text-accent-foreground">
             Ready to Send a Package?

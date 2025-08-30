@@ -62,7 +62,7 @@ export interface AuthState {
   isAuthenticated: boolean;
 }
 
-export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER";
+export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER" | "SENDER" | "RECIVER";
 export interface ISidebarItems {
   title: string;
   items: {

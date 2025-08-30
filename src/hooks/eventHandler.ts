@@ -35,27 +35,75 @@ export const withAsyncHandler = <TArgs extends any[], TReturn>(
     try {
       const result = await operation(...args);
 
-      // Handle success
-      if (showSuccess) {
-        const message =
-          typeof successMessage === "function"
-            ? successMessage(result)
-            : successMessage;
-        toast.success(message, { id: toastId });
+      // Check if the operation indicates success (handle both success flag and error scenarios)
+      const isSuccess =
+        (result as any)?.data?.success === true ||
+        (result as any)?.success === true ||
+        !(result as any)?.error;
+
+      if (isSuccess) {
+        // Handle success
+        if (showSuccess) {
+          const message =
+            typeof successMessage === "function"
+              ? successMessage(result)
+              : successMessage;
+          toast.success(message, { id: toastId });
+        } else {
+          toast.dismiss(toastId);
+        }
+
+        if (onSuccess) {
+          onSuccess(result);
+        }
+
+        if (navigateTo) {
+          navigateTo();
+        }
+
+        return result;
       } else {
-        toast.dismiss(toastId);
+        // Handle API-level errors (success: false responses)
+        const errorData =
+          (result as any)?.error || (result as any)?.data?.error || result;
+
+        // Extract error message from various common patterns in the response
+        const extractedErrorMessage =
+          errorData?.message ||
+          errorData?.data?.message ||
+          (result as any)?.data?.message ||
+          "Operation failed";
+
+        let finalErrorMessage: string;
+
+        if (errorMessage) {
+          finalErrorMessage =
+            typeof errorMessage === "function"
+              ? errorMessage(errorData)
+              : errorMessage;
+        } else {
+          finalErrorMessage = extractedErrorMessage;
+        }
+
+        if (showError) {
+          toast.error(finalErrorMessage, { id: toastId });
+        } else {
+          toast.dismiss(toastId);
+        }
+
+        if (onError) {
+          onError(errorData);
+        }
+
+        // Re-throw the error for further handling if needed
+        if (rethrowError) {
+          throw errorData;
+        }
       }
 
-      if (onSuccess) {
-        onSuccess(result);
-      }
-
-      if (navigateTo) {
-        navigateTo();
-      }
-
-      return result;
+      // return result;
     } catch (error: any) {
+      console.log(error);
       // Extract error message from various common patterns
       const extractedErrorMessage =
         error?.data?.message ||

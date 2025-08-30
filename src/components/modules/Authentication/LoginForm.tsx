@@ -131,7 +131,7 @@ export function LoginForm({
             />
 
             <Button type="submit" disabled={isLoading} className="w-full">
-              {isLoading ? <Loader /> : "Login"}
+              {isLoading ? <Loader className="animate-spin" /> : "Login"}
             </Button>
           </form>
         </Form>

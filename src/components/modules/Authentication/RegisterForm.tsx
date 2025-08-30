@@ -10,12 +10,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Password from "@/components/ui/Password";
+import { withAsyncHandler } from "@/hooks/eventHandler";
 import { cn } from "@/lib/utils";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import { Loader } from "lucide-react";
+import { useForm, type FieldValues } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
-import { toast } from "sonner";
 import { z } from "zod";
 
 const registerSchema = z
@@ -27,10 +28,30 @@ const registerSchema = z
       })
       .max(50),
     email: z.email(),
-    password: z.string().min(8, { error: "Password is too short" }),
+    password: z
+      .string()
+      .min(8, { message: "Password must be at least 8 characters long." })
+      .regex(/^(?=.*[A-Z])/, {
+        message: "Password must contain at least 1 uppercase letter.",
+      })
+      .regex(/^(?=.*[!@#$%^&*])/, {
+        message: "Password must contain at least 1 special character.",
+      })
+      .regex(/^(?=.*\d)/, {
+        message: "Password must contain at least 1 number.",
+      }),
     confirmPassword: z
       .string()
-      .min(8, { error: "Confirm Password is too short" }),
+      .min(8, { message: "Password must be at least 8 characters long." })
+      .regex(/^(?=.*[A-Z])/, {
+        message: "Password must contain at least 1 uppercase letter.",
+      })
+      .regex(/^(?=.*[!@#$%^&*])/, {
+        message: "Password must contain at least 1 special character.",
+      })
+      .regex(/^(?=.*\d)/, {
+        message: "Password must contain at least 1 number.",
+      }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Password do not match",
@@ -41,7 +62,7 @@ export function RegisterForm({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) {
-  const [register] = useRegisterMutation();
+  const [register, { isLoading }] = useRegisterMutation();
   const navigate = useNavigate();
 
   const form = useForm<z.infer<typeof registerSchema>>({
@@ -54,6 +75,17 @@ export function RegisterForm({
     },
   });
 
+  const registerHandler = withAsyncHandler(
+    (data: FieldValues) => register(data),
+    {
+      loadingMessage: "Registering in...",
+      successMessage: "Register successful! Please login now!",
+      navigateTo: () => navigate("/login"),
+      showSuccess: true,
+      showError: true,
+    }
+  );
+
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     const userInfo = {
       name: data.name,
@@ -61,14 +93,7 @@ export function RegisterForm({
       password: data.password,
     };
 
-    try {
-      const result = await register(userInfo).unwrap();
-      console.log(result);
-      toast.success("User created successfully");
-      navigate("/verify");
-    } catch (error) {
-      console.error(error);
-    }
+    await registerHandler(userInfo);
   };
 
   return (
@@ -152,8 +177,8 @@ export function RegisterForm({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Submit
+            <Button disabled={isLoading} type="submit" className="w-full">
+              {isLoading ? <Loader className="animate-spin" /> : "Submit"}
             </Button>
           </form>
         </Form>

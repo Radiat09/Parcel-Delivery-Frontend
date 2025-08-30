@@ -1,13 +1,3 @@
-import {
-  FileTextIcon,
-  GlobeIcon,
-  HomeIcon,
-  LayersIcon,
-  UsersIcon,
-} from "lucide-react";
-import { useId } from "react";
-
-import Logo from "@/assets/icon/Logo";
 import { Button } from "@/components/ui/button";
 import {
   NavigationMenu,
@@ -20,40 +10,42 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { role } from "@/constants/role";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+  authApi,
+  useLogoutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hook";
+import { Package } from "lucide-react";
+import { Link } from "react-router";
 import ThemeToggle from "../theme-toggle";
 
-// Navigation links with icons for desktop icon-only navigation
+// Navigation links array to be used in both desktop and mobile menus
 const navigationLinks = [
-  { href: "#", label: "Dashboard", icon: HomeIcon, active: true },
-  { href: "#", label: "Projects", icon: LayersIcon },
-  { href: "#", label: "Documentation", icon: FileTextIcon },
-  { href: "#", label: "Team", icon: UsersIcon },
-];
-
-// Language options
-const languages = [
-  { value: "en", label: "En" },
-  { value: "es", label: "Es" },
-  { value: "fr", label: "Fr" },
-  { value: "de", label: "De" },
-  { value: "ja", label: "Ja" },
+  { href: "/", label: "Home", role: "PUBLIC" },
+  { href: "/about", label: "About", role: "PUBLIC" },
+  { href: "/contact", label: "Contact", role: "PUBLIC" },
+  { href: "/admin", label: "Dashboard", role: role?.admin || role?.superAdmin },
+  { href: "/user", label: "Dashboard", role: role?.user },
 ];
 
 export default function Navbar() {
-  const id = useId();
+  const { data } = useUserInfoQuery(undefined);
+  const [logout] = useLogoutMutation();
+  const dispatch = useAppDispatch();
+
+  console.log(data);
+  const handleLogout = async () => {
+    await logout(undefined);
+    dispatch(authApi.util.resetApiState());
+  };
 
   return (
-    <header className="border-b px-4 md:px-6">
-      <div className="flex h-16 items-center justify-between gap-4">
+    <header className="border-b">
+      <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
         {/* Left side */}
-        <div className="flex flex-1 items-center gap-2">
+        <div className="flex items-center gap-2">
           {/* Mobile menu trigger */}
           <Popover>
             <PopoverTrigger asChild>
@@ -92,86 +84,94 @@ export default function Navbar() {
             <PopoverContent align="start" className="w-36 p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => {
-                    const Icon = link.icon;
-                    return (
-                      <NavigationMenuItem key={index} className="w-full">
-                        <NavigationMenuLink
-                          href={link.href}
-                          className="flex-row items-center gap-2 py-1.5"
-                          active={link.active}
-                        >
-                          <Icon
-                            size={16}
-                            className="text-muted-foreground"
-                            aria-hidden="true"
-                          />
-                          <span>{link.label}</span>
-                        </NavigationMenuLink>
-                      </NavigationMenuItem>
-                    );
-                  })}
+                  {navigationLinks.map((link, index) => (
+                    <div key={index}>
+                      {link.role === "PUBLIC" && (
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            asChild
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                          >
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+                      {link.role === data?.data?.role && (
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            asChild
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                          >
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )}
+                    </div>
+                  ))}
                 </NavigationMenuList>
               </NavigationMenu>
             </PopoverContent>
           </Popover>
+          {/* Main nav */}
           <div className="flex items-center gap-6">
-            {/* Logo */}
-            <Logo />
-            {/* Desktop navigation - icon only */}
-            {/* <NavigationMenu className="hidden md:flex">
+            <div className="text-primary hover:text-primary/90">
+              <Link
+                to="/"
+                className="flex items-center text-primary font-bold text-xl"
+              >
+                <Package className="w-8 h-8 mr-2" />
+                ParcelDelivery
+              </Link>
+            </div>
+            {/* Navigation menu */}
+            <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                <TooltipProvider>
-                  {navigationLinks.map((link) => (
-                    <NavigationMenuItem key={link.label}>
-                      <Tooltip>
-                        <TooltipTrigger asChild>
-                          <NavigationMenuLink
-                            href={link.href}
-                            className="flex size-8 items-center justify-center p-1.5"
-                          >
-                            <link.icon size={20} aria-hidden="true" />
-                            <span className="sr-only">{link.label}</span>
-                          </NavigationMenuLink>
-                        </TooltipTrigger>
-                        <TooltipContent
-                          side="bottom"
-                          className="px-2 py-1 text-xs"
+                {navigationLinks.map((link, index) => (
+                  <div key={index}>
+                    {link.role === "PUBLIC" && (
+                      <NavigationMenuItem key={index}>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
                         >
-                          <p>{link.label}</p>
-                        </TooltipContent>
-                      </Tooltip>
-                    </NavigationMenuItem>
-                  ))}
-                </TooltipProvider>
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                    {link.role === data?.data?.role && (
+                      <NavigationMenuItem key={index}>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )}
+                  </div>
+                ))}
               </NavigationMenuList>
-            </NavigationMenu> */}
+            </NavigationMenu>
           </div>
         </div>
         {/* Right side */}
         <div className="flex items-center gap-2">
-          {/* Theme toggle */}
+          {/* <ModeToggle /> */}
           <ThemeToggle />
-          {/* Language selector */}
-          <Select defaultValue="en">
-            <SelectTrigger
-              id={`language-${id}`}
-              className="[&>svg]:text-muted-foreground/80 hover:bg-accent hover:text-accent-foreground h-8 border-none px-2 shadow-none [&>svg]:shrink-0"
-              aria-label="Select language"
+          {data?.data?.email && (
+            <Button
+              onClick={handleLogout}
+              variant="outline"
+              className="text-sm"
             >
-              <GlobeIcon size={16} aria-hidden="true" />
-              <SelectValue className="hidden sm:inline-flex" />
-            </SelectTrigger>
-            <SelectContent className="[&_*[role=option]]:ps-2 [&_*[role=option]]:pe-8 [&_*[role=option]>span]:start-auto [&_*[role=option]>span]:end-2 [&_*[role=option]>span]:flex [&_*[role=option]>span]:items-center [&_*[role=option]>span]:gap-2">
-              {languages.map((lang) => (
-                <SelectItem key={lang.value} value={lang.value}>
-                  <span className="flex items-center gap-2">
-                    <span className="truncate">{lang.label}</span>
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+              Logout
+            </Button>
+          )}
+          {!data?.data?.email && (
+            <Button asChild className="text-sm">
+              <Link to="/login">Login</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>

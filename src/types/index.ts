@@ -1,3 +1,5 @@
+import type { ComponentType } from "react";
+
 // types.ts
 export type Theme = "dark" | "light" | "system";
 
@@ -59,3 +61,17 @@ export interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
 }
+
+export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER";
+export interface ISidebarItems {
+  title: string;
+  items: {
+    title: string;
+    url: string;
+    component: ComponentType;
+  }[];
+}
+
+export type IconClass = {
+  classes?: string;
+};

@@ -1,6 +1,6 @@
 import CreateParcelForm from "@/components/Parcel/CreateParcelForm";
 import ParcelTracker from "@/components/Parcel/ParcelTracker";
-import User from "@/pages/User/User";
+import { User } from "@/pages/Admin/User";
 import type { ISidebarItems } from "@/types";
 
 // const Analytics = lazy(() => import("@/pages/Admin/Analytics"));

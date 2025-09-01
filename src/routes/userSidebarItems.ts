@@ -1,4 +1,4 @@
-import Parcels from "@/pages/Parcel/Parcels";
+import { Parcel } from "@/pages/Admin/Parcels";
 import type { ISidebarItems } from "@/types";
 
 export const userSidebarItems: ISidebarItems[] = [
@@ -8,7 +8,7 @@ export const userSidebarItems: ISidebarItems[] = [
       {
         title: "Parcels",
         url: "/user/parcels",
-        component: Parcels,
+        component: Parcel,
       },
     ],
   },

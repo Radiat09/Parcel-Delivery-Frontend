@@ -1,4 +1,3 @@
-// components/dashboard/sender/CreateParcelForm.tsx
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -10,42 +9,168 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { withAsyncHandler } from "@/hooks/eventHandler";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { useCreateParcelMutation } from "@/redux/features/parcel/parcel.api";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import { Loader } from "lucide-react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { toast } from "sonner";
 import { z } from "zod";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
+
+const packageTypes = ["DOCUMENT", "PACKAGE", "FRAGILE"] as const;
 
 const parcelSchema = z.object({
-  receiverName: z.string().min(1, "Receiver name is required"),
-  receiverAddress: z.string().min(1, "Receiver address is required"),
-  receiverPhone: z.string().min(1, "Receiver phone is required"),
-  weight: z.number().min(0.1, "Weight must be at least 0.1 kg"),
-  description: z.string().optional(),
+  receiver: z.object({
+    name: z
+      .string()
+      .min(1, "Receiver name is required")
+      .min(2, "Receiver name must be at least 2 characters")
+      .max(50, "Receiver name cannot exceed 50 characters")
+      .trim(),
+
+    phone: z
+      .string()
+      .min(1, "Phone number is required")
+      .regex(/^(?:\+8801\d{9}|01\d{9})$/, {
+        message:
+          "Phone number must be valid for Bangladesh. Format: +8801XXXXXXXXX or 01XXXXXXXXX",
+      })
+      .trim(),
+
+    address: z
+      .string()
+      .min(1, "Address is required")
+      .min(5, "Address must be at least 5 characters")
+      .max(200, "Address cannot exceed 200 characters")
+      .trim(),
+
+    email: z
+      .email({ message: "Invalid email address format" })
+      .min(1, "Email is required")
+      .min(5, "Email must be at least 5 characters long")
+      .max(100, "Email cannot exceed 100 characters")
+      .trim()
+      .toLowerCase(),
+  }),
+
+  packageDetails: z.object({
+    type: z.enum(packageTypes, "Please select a valid package type"),
+    weight: z
+      .number()
+      .positive("Weight must be a positive number")
+      .max(100, "Weight cannot exceed 100kg")
+      .refine((val) => !isNaN(val), "Weight must be a valid number"),
+
+    description: z
+      .string()
+      .max(500, "Description cannot exceed 500 characters")
+      .optional()
+      .or(z.literal("")),
+  }),
+
+  fee: z
+    .number()
+    .nonnegative("Fee cannot be negative")
+    .max(10000, "Fee cannot exceed 10,000")
+    .refine((val) => !isNaN(val), "Fee must be a valid number"),
 });
 
 type ParcelFormData = z.infer<typeof parcelSchema>;
 
+interface FeeCalculationParams {
+  weight: number;
+  packageType: "DOCUMENT" | "PACKAGE" | "FRAGILE";
+}
+
+const calculateDeliveryFee = ({
+  weight,
+  packageType,
+}: FeeCalculationParams): number => {
+  // Base fee for all packages
+  const BASE_FEE = 50;
+
+  // Weight surcharge (per kg)
+  const WEIGHT_RATE = 15;
+
+  // Package type multipliers
+  const TYPE_MULTIPLIERS = {
+    DOCUMENT: 1.0,
+    PACKAGE: 1.5,
+    FRAGILE: 2.0,
+  };
+
+  // Calculate weight surcharge
+  const weightSurcharge = Math.max(0, weight - 1) * WEIGHT_RATE;
+
+  // Get multiplier based on package type
+  const typeMultiplier = TYPE_MULTIPLIERS[packageType];
+
+  // Calculate total fee
+  const totalFee = (BASE_FEE + weightSurcharge) * typeMultiplier;
+
+  return Math.round(totalFee * 100) / 100; // Round to 2 decimal places
+};
+
 const CreateParcelForm: React.FC = () => {
+  const { data: user } = useUserInfoQuery(undefined);
+  // console.log(user.data);
   const [createParcel, { isLoading }] = useCreateParcelMutation();
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
+    watch,
+    setValue,
   } = useForm<ParcelFormData>({
     resolver: zodResolver(parcelSchema),
+    mode: "onChange",
   });
 
-  const onSubmit = async (data: ParcelFormData) => {
-    try {
-      await createParcel(data).unwrap();
-      toast.success("Parcel created successfully!");
-      reset();
-    } catch (error: any) {
-      toast.error(error.data?.message || "Failed to create parcel");
+  // Watch weight and package type fields for automatic fee calculation
+  const weightValue = watch("packageDetails.weight");
+  const packageTypeValue = watch("packageDetails.type");
+
+  // Calculate fee whenever weight or package type changes
+  useEffect(() => {
+    if (weightValue && packageTypeValue) {
+      const calculatedFee = calculateDeliveryFee({
+        weight: weightValue,
+        packageType: packageTypeValue,
+      });
+      setValue("fee", calculatedFee, { shouldValidate: true });
     }
+  }, [weightValue, packageTypeValue, setValue]);
+
+  const createParcelHandler = withAsyncHandler(
+    (data: ParcelFormData) => createParcel(data),
+    {
+      loadingMessage: "Creating your parcel...",
+      successMessage: "Parcel created successfully!",
+      showSuccess: true,
+      showError: true,
+      onSuccess: () => reset(),
+    }
+  );
+
+  const onSubmit = async (data: ParcelFormData) => {
+    console.log("Form submitted:", data);
+
+    const dataR = {
+      ...data,
+      sender: user?.data?._id,
+    };
+    await createParcelHandler(dataR);
+    console.log(dataR);
+    // Your submission logic here
   };
 
   return (
@@ -58,73 +183,158 @@ const CreateParcelForm: React.FC = () => {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Receiver Fields */}
           <div className="space-y-2">
-            <Label htmlFor="receiverName">Receiver Name</Label>
+            <Label htmlFor="receiver.name">Receiver Name</Label>
             <Input
-              {...register("receiverName")}
-              className={errors.receiverName ? "border-destructive" : ""}
+              id="receiver.name"
+              {...register("receiver.name")}
+              className={errors?.receiver?.name ? "border-destructive" : ""}
             />
-            {errors.receiverName && (
+            {errors?.receiver?.name && (
               <p className="text-sm text-destructive">
-                {errors.receiverName.message}
+                {errors?.receiver?.name?.message}
               </p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="receiverAddress">Receiver Address</Label>
+            <Label htmlFor="receiver.email">Receiver Email</Label>
+            <Input
+              id="receiver.email"
+              type="email"
+              {...register("receiver.email")}
+              className={errors?.receiver?.email ? "border-destructive" : ""}
+            />
+            {errors?.receiver?.email && (
+              <p className="text-sm text-destructive">
+                {errors?.receiver?.email?.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="receiver.phone">Receiver Phone</Label>
+            <Input
+              id="receiver.phone"
+              {...register("receiver.phone")}
+              className={errors?.receiver?.phone ? "border-destructive" : ""}
+            />
+            {errors?.receiver?.phone && (
+              <p className="text-sm text-destructive">
+                {errors?.receiver?.phone?.message}
+              </p>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="receiver.address">Receiver Address</Label>
             <Textarea
-              {...register("receiverAddress")}
+              id="receiver.address"
+              {...register("receiver.address")}
               rows={3}
-              className={errors.receiverAddress ? "border-destructive" : ""}
+              className={errors?.receiver?.address ? "border-destructive" : ""}
             />
-            {errors.receiverAddress && (
+            {errors?.receiver?.address && (
               <p className="text-sm text-destructive">
-                {errors.receiverAddress.message}
+                {errors?.receiver?.address?.message}
+              </p>
+            )}
+          </div>
+
+          {/* Package Details Fields */}
+          <div className="space-y-2">
+            <Label htmlFor="packageDetails.type">Package Type</Label>
+            <Select
+              onValueChange={(value: "DOCUMENT" | "PACKAGE" | "FRAGILE") =>
+                setValue("packageDetails.type", value)
+              }
+            >
+              <SelectTrigger
+                className={
+                  errors?.packageDetails?.type ? "border-destructive" : ""
+                }
+              >
+                <SelectValue placeholder="Select package type" />
+              </SelectTrigger>
+              <SelectContent>
+                {packageTypes.map((type) => (
+                  <SelectItem key={type} value={type}>
+                    {type}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            {errors?.packageDetails?.type && (
+              <p className="text-sm text-destructive">
+                {errors?.packageDetails?.type?.message}
               </p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="receiverPhone">Receiver Phone</Label>
+            <Label htmlFor="packageDetails.weight">Weight (kg)</Label>
             <Input
-              {...register("receiverPhone")}
-              className={errors.receiverPhone ? "border-destructive" : ""}
-            />
-            {errors.receiverPhone && (
-              <p className="text-sm text-destructive">
-                {errors.receiverPhone.message}
-              </p>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="weight">Weight (kg)</Label>
-            <Input
+              id="packageDetails.weight"
               type="number"
               step="0.1"
-              {...register("weight", { valueAsNumber: true })}
-              className={errors.weight ? "border-destructive" : ""}
+              {...register("packageDetails.weight", { valueAsNumber: true })}
+              className={
+                errors?.packageDetails?.weight ? "border-destructive" : ""
+              }
             />
-            {errors.weight && (
+            {errors?.packageDetails?.weight && (
               <p className="text-sm text-destructive">
-                {errors.weight.message}
+                {errors?.packageDetails?.weight?.message}
               </p>
             )}
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="description">Description (Optional)</Label>
-            <Textarea {...register("description")} rows={2} />
+            <Label htmlFor="packageDetails.description">
+              Description (Optional)
+            </Label>
+            <Textarea
+              id="packageDetails.description"
+              {...register("packageDetails.description")}
+              rows={2}
+              className={
+                errors?.packageDetails?.description ? "border-destructive" : ""
+              }
+            />
+            {errors?.packageDetails?.description && (
+              <p className="text-sm text-destructive">
+                {errors?.packageDetails?.description?.message}
+              </p>
+            )}
           </div>
 
-          <Button type="submit" disabled={isLoading} className="w-full">
-            {isLoading ? "Creating..." : "Create Parcel"}
+          {/* Fee Field (auto-calculated) */}
+          <div className="space-y-2">
+            <Label htmlFor="fee">Delivery Fee (USDT)</Label>
+            <Input
+              disabled
+              id="fee"
+              type="number"
+              step="0.01"
+              {...register("fee", { valueAsNumber: true })}
+              readOnly
+              className={errors?.fee ? "border-destructive" : ""}
+            />
+            {errors?.fee && (
+              <p className="text-sm text-destructive">{errors?.fee?.message}</p>
+            )}
+            <p className="text-sm text-muted-foreground">
+              Fee is automatically calculated based on weight and package type
+            </p>
+          </div>
+
+          <Button disabled={isLoading} type="submit" className="w-full">
+            {isLoading ? <Loader className="animate-spin" /> : "Create Parcel"}
           </Button>
         </form>
       </CardContent>
     </Card>
   );
 };
-
 export default CreateParcelForm;

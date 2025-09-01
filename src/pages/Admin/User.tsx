@@ -60,7 +60,7 @@ export const User: React.FC = () => {
     isLoading,
     error,
   } = useGetAllUsersQuery({ searchTerm, isActive });
-  const [updateUser] = useUpdateUserMutation();
+  const [updateUser, { isLoading: updateIsLoading }] = useUpdateUserMutation();
 
   const handleSearchValueChange = (value: string) => {
     const params = new URLSearchParams(searchParams);
@@ -204,6 +204,7 @@ export const User: React.FC = () => {
                         {user.isActive === "ACTIVE" ? (
                           <>
                             <DropdownMenuItem
+                              disabled={updateIsLoading}
                               onClick={() =>
                                 handleStatusChange(
                                   user._id as string,
@@ -216,6 +217,7 @@ export const User: React.FC = () => {
                               Block User
                             </DropdownMenuItem>
                             <DropdownMenuItem
+                              disabled={updateIsLoading}
                               onClick={() =>
                                 handleStatusChange(
                                   user._id as string,
@@ -231,6 +233,7 @@ export const User: React.FC = () => {
                         ) : user.isActive === "BLOCKED" ? (
                           <>
                             <DropdownMenuItem
+                              disabled={updateIsLoading}
                               onClick={() =>
                                 handleStatusChange(user._id as string, "ACTIVE")
                               }
@@ -240,6 +243,7 @@ export const User: React.FC = () => {
                               Unblock User
                             </DropdownMenuItem>
                             <DropdownMenuItem
+                              disabled={updateIsLoading}
                               onClick={() =>
                                 handleStatusChange(
                                   user._id as string,
@@ -255,6 +259,7 @@ export const User: React.FC = () => {
                         ) : (
                           <>
                             <DropdownMenuItem
+                              disabled={updateIsLoading}
                               onClick={() =>
                                 handleStatusChange(
                                   user._id as string,
@@ -267,6 +272,7 @@ export const User: React.FC = () => {
                               Block User
                             </DropdownMenuItem>
                             <DropdownMenuItem
+                              disabled={updateIsLoading}
                               onClick={() =>
                                 handleStatusChange(user._id as string, "ACTIVE")
                               }
@@ -306,6 +312,7 @@ export const User: React.FC = () => {
                       {user.isActive === "ACTIVE" ? (
                         <>
                           <DropdownMenuItem
+                            disabled={updateIsLoading}
                             onClick={() =>
                               handleStatusChange(user._id as string, "BLOCKED")
                             }
@@ -315,6 +322,7 @@ export const User: React.FC = () => {
                             Block User
                           </DropdownMenuItem>
                           <DropdownMenuItem
+                            disabled={updateIsLoading}
                             onClick={() =>
                               handleStatusChange(user._id as string, "INACTIVE")
                             }
@@ -327,6 +335,7 @@ export const User: React.FC = () => {
                       ) : user.isActive === "BLOCKED" ? (
                         <>
                           <DropdownMenuItem
+                            disabled={updateIsLoading}
                             onClick={() =>
                               handleStatusChange(user._id as string, "ACTIVE")
                             }
@@ -348,6 +357,7 @@ export const User: React.FC = () => {
                       ) : (
                         <>
                           <DropdownMenuItem
+                            disabled={updateIsLoading}
                             onClick={() =>
                               handleStatusChange(user._id as string, "BLOCKED")
                             }
@@ -357,6 +367,7 @@ export const User: React.FC = () => {
                             Block User
                           </DropdownMenuItem>
                           <DropdownMenuItem
+                            disabled={updateIsLoading}
                             onClick={() =>
                               handleStatusChange(user._id as string, "ACTIVE")
                             }

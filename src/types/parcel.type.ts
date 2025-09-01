@@ -1,4 +1,4 @@
-export type TStatus =
+export type TParcelStatus =
   | "REQUESTED"
   | "APPROVED"
   | "PICKED"
@@ -10,7 +10,7 @@ export type TStatus =
 export type TPackageType = "DOCUMENT" | "PACKAGE" | "FRAGILE";
 
 export interface IStatusLog {
-  status: TStatus;
+  status: TParcelStatus;
   updatedBy: string;
   note?: string;
   createdAt: Date;
@@ -36,7 +36,7 @@ export interface IParcel {
   receiver: IReceiverInfo;
   packageDetails: IPackageDetails;
   fee: number;
-  currentStatus: TStatus;
+  currentStatus: TParcelStatus;
   statusLog: IStatusLog[];
   isBlocked: boolean;
   expectedDeliveryDate?: Date;

@@ -15,21 +15,39 @@ export type ThemeProviderState = {
   setTheme: () => void;
 };
 
+export type TRole =
+  | "SUPER_ADMIN"
+  | "ADMIN"
+  | "USER"
+  | "SENDER"
+  | "RECIVER"
+  | "DELIVERY_MAN";
+
+export type TStatus = "ACTIVE" | "INACTIVE" | "BLOCKED";
 // types/index.ts
-export interface User {
-  _id: string;
-  name: string;
-  email: string;
-  role: "sender" | "receiver" | "admin";
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+interface AuthProvider {
+  provider: string;
+  providerId: string;
 }
 
-export interface Parcel {
+export interface IUser {
+  _id: string;
+  id?: string;
+  name: string;
+  email: string;
+  role: TRole;
+  isDeleted: boolean;
+  isActive: "ACTIVE" | string; // Could be more specific if other values exist
+  isVerified: boolean;
+  auths: AuthProvider[];
+  createdAt: Date; // ISO date string
+  updatedAt: Date; // ISO date string
+}
+
+export interface IParcel {
   _id: string;
   trackingId: string;
-  sender: string | User;
+  sender: string;
   receiverName: string;
   receiverAddress: string;
   receiverPhone: string;
@@ -37,8 +55,8 @@ export interface Parcel {
   description?: string;
   status: ParcelStatus;
   statusHistory: StatusUpdate[];
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export type ParcelStatus =
@@ -52,17 +70,16 @@ export type ParcelStatus =
 export interface StatusUpdate {
   status: ParcelStatus;
   timestamp: string;
-  updatedBy: string | User;
+  updatedBy: string;
   note?: string;
 }
 
 export interface AuthState {
-  user: User | null;
+  user: IUser | null;
   token: string | null;
   isAuthenticated: boolean;
 }
 
-export type TRole = "SUPER_ADMIN" | "ADMIN" | "USER";
 export interface ISidebarItems {
   title: string;
   items: {

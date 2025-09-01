@@ -26,12 +26,18 @@ const navigationLinks = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/about", label: "About", role: "PUBLIC" },
   { href: "/contact", label: "Contact", role: "PUBLIC" },
-  { href: "/admin", label: "Dashboard", role: role?.admin || role?.superAdmin },
+  {
+    href: "/admin",
+    label: "Dashboard",
+    roles: [role?.admin, role?.superAdmin], // Use array of allowed roles
+  },
+  // { href: "/admin", label: "Dashboard", role: role?.superAdmin },
   { href: "/user", label: "Dashboard", role: role?.user },
 ];
 
 export default function Navbar() {
   const { data } = useUserInfoQuery(undefined);
+  console.log(data);
   const [logout] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
@@ -39,6 +45,14 @@ export default function Navbar() {
   const handleLogout = async () => {
     await logout(undefined);
     dispatch(authApi.util.resetApiState());
+  };
+
+  const shouldShowLink = (link) => {
+    if (link.role === "PUBLIC") return true;
+    if (link.roles) {
+      return link.roles.includes(data?.data?.role);
+    }
+    return link.role === data?.data?.role;
   };
 
   return (
@@ -84,7 +98,7 @@ export default function Navbar() {
             <PopoverContent align="start" className="w-36 p-1 md:hidden">
               <NavigationMenu className="max-w-none *:w-full">
                 <NavigationMenuList className="flex-col items-start gap-0 md:gap-2">
-                  {navigationLinks.map((link, index) => (
+                  {/* {navigationLinks.map((link, index) => (
                     <div key={index}>
                       {link.role === "PUBLIC" && (
                         <NavigationMenuItem key={index}>
@@ -107,7 +121,20 @@ export default function Navbar() {
                         </NavigationMenuItem>
                       )}
                     </div>
-                  ))}
+                  ))} */}
+                  {navigationLinks.map(
+                    (link, index) =>
+                      shouldShowLink(link) && (
+                        <NavigationMenuItem key={index}>
+                          <NavigationMenuLink
+                            asChild
+                            className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                          >
+                            <Link to={link.href}>{link.label}</Link>
+                          </NavigationMenuLink>
+                        </NavigationMenuItem>
+                      )
+                  )}
                 </NavigationMenuList>
               </NavigationMenu>
             </PopoverContent>
@@ -126,7 +153,7 @@ export default function Navbar() {
             {/* Navigation menu */}
             <NavigationMenu className="max-md:hidden">
               <NavigationMenuList className="gap-2">
-                {navigationLinks.map((link, index) => (
+                {/* {navigationLinks.map((link, index) => (
                   <div key={index}>
                     {link.role === "PUBLIC" && (
                       <NavigationMenuItem key={index}>
@@ -149,7 +176,20 @@ export default function Navbar() {
                       </NavigationMenuItem>
                     )}
                   </div>
-                ))}
+                ))} */}
+                {navigationLinks.map(
+                  (link, index) =>
+                    shouldShowLink(link) && (
+                      <NavigationMenuItem key={index}>
+                        <NavigationMenuLink
+                          asChild
+                          className="text-muted-foreground hover:text-primary py-1.5 font-medium"
+                        >
+                          <Link to={link.href}>{link.label}</Link>
+                        </NavigationMenuLink>
+                      </NavigationMenuItem>
+                    )
+                )}
               </NavigationMenuList>
             </NavigationMenu>
           </div>

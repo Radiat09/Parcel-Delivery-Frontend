@@ -29,7 +29,6 @@ interface AuthProvider {
   provider: string;
   providerId: string;
 }
-
 export interface IUser {
   _id: string;
   id?: string;
@@ -43,7 +42,6 @@ export interface IUser {
   createdAt: Date; // ISO date string
   updatedAt: Date; // ISO date string
 }
-
 export type ParcelStatus =
   | "pending"
   | "picked_up"

@@ -10,14 +10,32 @@ export const authApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["PARCEL"],
     }),
+    updateParcel: builder.mutation({
+      query: ({ trkId, data }) => ({
+        url: `/parcel/${trkId}`,
+        method: "PATCH",
+        data,
+      }),
+      invalidatesTags: ["PARCEL"],
+    }),
     getAllParcels: builder.query({
-      query: () => ({
+      query: (params) => ({
         url: "/parcel",
         method: "GET",
+        params,
       }),
       providesTags: ["PARCEL"],
+      transformResponse: (res) => {
+        const data = res.data;
+        const meta = res.meta;
+        return { data, meta };
+      },
     }),
   }),
 });
 
-export const { useCreateParcelMutation, useGetAllParcelsQuery } = authApi;
+export const {
+  useCreateParcelMutation,
+  useGetAllParcelsQuery,
+  useUpdateParcelMutation,
+} = authApi;

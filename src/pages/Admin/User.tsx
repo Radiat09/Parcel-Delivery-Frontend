@@ -128,12 +128,18 @@ export const User: React.FC = () => {
           </div>
           <Select
             value={isActive || ""}
-            onValueChange={handleFilterValueChange}
+            onValueChange={(value) => {
+              if (value === "all") {
+                return handleClearFilter();
+              }
+              handleFilterValueChange(value);
+            }}
           >
             <SelectTrigger className="w-full sm:w-[180px]">
               <SelectValue placeholder="Filter by status" />
             </SelectTrigger>
             <SelectContent>
+              <SelectItem value="all">All Statuses</SelectItem>
               <SelectItem value="ACTIVE">Active</SelectItem>
               <SelectItem value="INACTIVE">Inactive</SelectItem>
               <SelectItem value="BLOCKED">Blocked</SelectItem>

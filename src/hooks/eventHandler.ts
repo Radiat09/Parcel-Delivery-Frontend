@@ -34,6 +34,7 @@ export const withAsyncHandler = <TArgs extends any[], TReturn>(
 
     try {
       const result = await operation(...args);
+      console.log(result);
 
       // Check if the operation indicates success (handle both success flag and error scenarios)
       const isSuccess =

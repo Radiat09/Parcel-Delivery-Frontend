@@ -29,7 +29,6 @@ interface AuthProvider {
   provider: string;
   providerId: string;
 }
-
 export interface IUser {
   _id: string;
   id?: string;
@@ -43,22 +42,6 @@ export interface IUser {
   createdAt: Date; // ISO date string
   updatedAt: Date; // ISO date string
 }
-
-export interface IParcel {
-  _id: string;
-  trackingId: string;
-  sender: string;
-  receiverName: string;
-  receiverAddress: string;
-  receiverPhone: string;
-  weight: number;
-  description?: string;
-  status: ParcelStatus;
-  statusHistory: StatusUpdate[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export type ParcelStatus =
   | "pending"
   | "picked_up"
@@ -79,7 +62,6 @@ export interface AuthState {
   token: string | null;
   isAuthenticated: boolean;
 }
-
 
 export interface ISidebarItems {
   title: string;

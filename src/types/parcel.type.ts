@@ -32,14 +32,34 @@ export interface IReceiverInfo {
 export interface IParcel {
   _id: string;
   trackingId: string;
-  sender: string;
-  receiver: IReceiverInfo;
-  packageDetails: IPackageDetails;
+  receiver: {
+    name: string;
+    address: string;
+    email: string;
+    phone: string;
+  };
+  sender: {
+    name: string;
+    email: string;
+    phone: string;
+  };
+  packageDetails: {
+    type: string;
+    weight: number;
+    description: string;
+  };
   fee: number;
   currentStatus: TParcelStatus;
-  statusLog: IStatusLog[];
   isBlocked: boolean;
-  expectedDeliveryDate?: Date;
-  actualDeliveryDate?: Date;
-  isNew?: boolean;
+  expectedDeliveryDate: string;
+  statusLog: Array<{
+    status: string;
+    updatedBy: string;
+    note: string;
+    createdAt: string;
+    _id: string;
+  }>;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
 }

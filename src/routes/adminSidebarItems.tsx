@@ -1,5 +1,6 @@
 import CreateParcelForm from "@/components/Parcel/CreateParcelForm";
 import ParcelTracker from "@/components/Parcel/ParcelTracker";
+import ManageParcel from "@/pages/Admin/ManageParcel";
 import { User } from "@/pages/Admin/User";
 import type { ISidebarItems } from "@/types";
 
@@ -23,6 +24,11 @@ export const adminSidebarItems: ISidebarItems[] = [
         title: "Create Parcel",
         url: "/admin/create-parcel",
         component: CreateParcelForm,
+      },
+      {
+        title: "Manage Parcel",
+        url: "/admin/manage-parcel",
+        component: ManageParcel,
       },
       {
         title: "Track parcel",

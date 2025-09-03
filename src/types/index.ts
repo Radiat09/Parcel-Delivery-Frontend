@@ -44,21 +44,6 @@ export interface IUser {
   updatedAt: Date; // ISO date string
 }
 
-export interface IParcel {
-  _id: string;
-  trackingId: string;
-  sender: string;
-  receiverName: string;
-  receiverAddress: string;
-  receiverPhone: string;
-  weight: number;
-  description?: string;
-  status: ParcelStatus;
-  statusHistory: StatusUpdate[];
-  createdAt: Date;
-  updatedAt: Date;
-}
-
 export type ParcelStatus =
   | "pending"
   | "picked_up"

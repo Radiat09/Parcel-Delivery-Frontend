@@ -38,6 +38,7 @@ import {
   useUpdateParcelMutation,
 } from "@/redux/features/parcel/parcel.api";
 import type { IParcel, TParcelStatus } from "@/types/parcel.type";
+import { getChangedFieldsEnhanced } from "@/utils/getChangedFields";
 import { getStatusVariant } from "@/utils/getStatus";
 import {
   Eye,
@@ -62,6 +63,9 @@ const statusArray = [
 ];
 
 export default function ManageParcel() {
+  const [editedParcel, setEditedParcel] = useState<Partial<IParcel> | null>(
+    null
+  );
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm") || undefined;
   const currentStatus = searchParams.get("currentStatus") || undefined;
@@ -107,6 +111,22 @@ export default function ManageParcel() {
 
   const parcelUpdater = async (trkId: string, data: Partial<IParcel>) => {
     await parcelUpdateHandler({ trkId, data });
+  };
+
+  const handleOnUpdateParcel = async () => {
+    if (editedParcel && viewParcel) {
+      const changes = getChangedFieldsEnhanced(viewParcel, editedParcel);
+
+      const trkId = viewParcel.trackingId;
+      const data = { ...changes };
+
+      // Only proceed if there are actual changes
+      if (Object.keys(changes)?.length > 0) {
+        await parcelUpdater(trkId, data);
+        // Don't reset editedParcel here - let the parent component update the parcel prop
+        // setEditedParcel({ ...viewParcel });
+      }
+    }
   };
 
   if (isLoading) return <Loading />;
@@ -173,7 +193,10 @@ export default function ManageParcel() {
           {/* Mobile View */}
           <div className="sm:hidden space-y-4">
             {data?.data?.map((parcel: IParcel) => (
-              <div key={parcel._id} className="border rounded-lg p-4 space-y-3">
+              <div
+                key={parcel?.trackingId}
+                className="border rounded-lg p-4 space-y-3"
+              >
                 <div className="flex justify-between items-start">
                   <div>
                     <p className="font-semibold">{parcel.trackingId}</p>
@@ -389,7 +412,7 @@ export default function ManageParcel() {
                               <DropdownMenuItem
                                 disabled={isUpdateParcelLoading}
                                 onClick={() =>
-                                  parcelUpdater(parcel.trackingId, {
+                                  parcelUpdater(parcel?.trackingId, {
                                     isBlocked: true,
                                   })
                                 }
@@ -417,10 +440,13 @@ export default function ManageParcel() {
         </CardContent>
       </Card>
       <ParcelDetailsDialog
+        editedParcel={editedParcel}
+        setEditedParcel={setEditedParcel}
         onOpenChange={() => setViewDetails(!viewDetails)}
         open={viewDetails}
-        onUpdateParcel={parcelUpdater}
+        onUpdateParcel={handleOnUpdateParcel}
         parcel={viewParcel}
+        isLoading={isUpdateParcelLoading}
       />
     </>
   );

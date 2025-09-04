@@ -38,7 +38,6 @@ interface AuthProvider {
   provider: string;
   providerId: string;
 }
-
 export interface IUser {
   _id: string;
   id?: string;

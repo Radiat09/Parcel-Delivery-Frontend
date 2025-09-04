@@ -7,7 +7,23 @@ export type TParcelStatus =
   | "CANCELLED"
   | "RETURNED";
 
+export enum EParcelStatus {
+  REQUESTED = "REQUESTED",
+  APPROVED = "APPROVED",
+  PICKED = "PICKED",
+  IN_TRANSIT = "IN_TRANSIT",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED",
+  RETURNED = "RETURNED",
+}
+
 export type TPackageType = "DOCUMENT" | "PACKAGE" | "FRAGILE";
+
+export enum EPackageType {
+  DOCUMENT = "DOCUMENT",
+  PACKAGE = "PACKAGE",
+  FRAGILE = "FRAGILE",
+}
 
 export interface IStatusLog {
   status: TParcelStatus;

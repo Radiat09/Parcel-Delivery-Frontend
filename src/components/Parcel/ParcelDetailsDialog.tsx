@@ -9,11 +9,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import type { IParcel, TParcelStatus } from "@/types/parcel.type";
+import { PackageTypesArray, ParcelStatusArray } from "@/constants/parcel";
+import { type IParcel, type TParcelStatus } from "@/types/parcel.type";
 import { getStatusVariant } from "@/utils/getStatus";
 import {
   Clock,
   DollarSign,
+  Loader,
   Mail,
   MapPin,
   Package,
@@ -22,7 +24,7 @@ import {
   User,
   X,
 } from "lucide-react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -35,8 +37,13 @@ import { StatusBadge } from "../ui/statusBadge";
 interface ParcelDetailsDialogProps {
   parcel: IParcel | null;
   open: boolean;
+  editedParcel: Partial<IParcel> | null; // Fixed type
+  setEditedParcel: React.Dispatch<
+    React.SetStateAction<Partial<IParcel> | null>
+  >;
   onOpenChange: (open: boolean) => void;
-  onUpdateParcel: (id: string, updates: Partial<IParcel>) => void;
+  onUpdateParcel: () => Promise<void>;
+  isLoading: boolean;
 }
 
 export function ParcelDetailsDialog({
@@ -44,31 +51,28 @@ export function ParcelDetailsDialog({
   open,
   onOpenChange,
   onUpdateParcel,
+  editedParcel,
+  setEditedParcel,
+  isLoading,
 }: ParcelDetailsDialogProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [editedParcel, setEditedParcel] = useState<Partial<IParcel> | null>(
-    null
-  );
 
   // Initialize edited parcel when dialog opens or parcel changes
-  useState(() => {
+  useEffect(() => {
     if (parcel) {
       setEditedParcel({ ...parcel });
     }
-  }, [parcel]);
-
-  if (!parcel) return null;
+  }, [parcel, open]);
 
   const handleSave = async () => {
-    console.log(editedParcel);
-    if (editedParcel) {
-      // await onUpdateParcel({ trkId: parcel?.trackingId, data: editedParcel });
-      setIsEditing(false);
-    }
-  };
+    await onUpdateParcel();
+    setIsEditing(true);
+    onOpenChange(true);
+  }; // Fixed syntax error
 
   const handleCancel = () => {
-    setEditedParcel({ ...parcel });
+    // Reset to the current parcel data (which might have been updated by parent)
+    setEditedParcel(parcel ? { ...parcel } : null);
     setIsEditing(false);
   };
 
@@ -111,6 +115,8 @@ export function ParcelDetailsDialog({
     });
   };
 
+  if (!parcel || !editedParcel) return null;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
@@ -132,8 +138,14 @@ export function ParcelDetailsDialog({
                 <Button variant="outline" onClick={handleCancel}>
                   <X className="mr-2 h-4 w-4" /> Cancel
                 </Button>
-                <Button onClick={handleSave}>
-                  <Save className="mr-2 h-4 w-4" /> Save Changes
+                <Button disabled={isLoading} onClick={handleSave}>
+                  {isLoading ? (
+                    <Loader className="animate-spin" />
+                  ) : (
+                    <span className="flex items-center justify-center">
+                      <Save className="mr-2 h-4 w-4" /> Save Changes
+                    </span>
+                  )}
                 </Button>
               </>
             ) : (
@@ -148,7 +160,7 @@ export function ParcelDetailsDialog({
             <div>
               <h3 className="font-semibold mb-2 flex items-center gap-2">
                 <StatusBadge variant={getStatusVariant(parcel?.currentStatus)}>
-                  {parcel.currentStatus}
+                  {parcel?.currentStatus}
                 </StatusBadge>
                 {isEditing && (
                   <Select
@@ -161,14 +173,11 @@ export function ParcelDetailsDialog({
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="REQUESTED">Requested</SelectItem>
-                      <SelectItem value="PROCESSING">Processing</SelectItem>
-                      <SelectItem value="IN_TRANSIT">In Transit</SelectItem>
-                      <SelectItem value="OUT_FOR_DELIVERY">
-                        Out for Delivery
-                      </SelectItem>
-                      <SelectItem value="DELIVERED">Delivered</SelectItem>
-                      <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                      {ParcelStatusArray.map((status) => (
+                        <SelectItem key={status} value={status}>
+                          {status}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
@@ -208,11 +217,11 @@ export function ParcelDetailsDialog({
                       <SelectValue placeholder="Select type" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="FRAGILE">Fragile</SelectItem>
-                      <SelectItem value="DOCUMENT">Document</SelectItem>
-                      <SelectItem value="ELECTRONICS">Electronics</SelectItem>
-                      <SelectItem value="CLOTHING">Clothing</SelectItem>
-                      <SelectItem value="OTHER">Other</SelectItem>
+                      {PackageTypesArray.map((pak) => (
+                        <SelectItem key={pak} value={pak}>
+                          {pak}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 ) : (
@@ -410,7 +419,7 @@ export function ParcelDetailsDialog({
           </div>
 
           {/* Metadata */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
+          <div className="grid grid-cols-1 gap-4 text-sm text-muted-foreground">
             <div>
               <span className="font-medium">Created: </span>
               {formatDateTime(parcel.createdAt)}

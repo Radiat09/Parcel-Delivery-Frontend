@@ -8,15 +8,23 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import type { Parcel } from "@/types";
-import { Calendar, MapPin, Package, Phone, User } from "lucide-react";
+import { IParcel } from "@/types/parcel.type";
+import {
+  Calendar,
+  MapPin,
+  Package,
+  Phone,
+  SquareLibrary,
+  User,
+} from "lucide-react";
 import React from "react";
 
 interface ParcelDetailsProps {
-  parcel: Parcel;
+  parcel: IParcel;
 }
 
 const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
+  console.log(parcel);
   const getStatusColor = (status: string) => {
     switch (status) {
       case "delivered":
@@ -37,11 +45,14 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle>Parcel Details</CardTitle>
-          <Badge variant="outline" className={getStatusColor(parcel.status)}>
-            {parcel.status.replace("_", " ").toUpperCase()}
+          <Badge
+            variant="outline"
+            className={getStatusColor(parcel?.currentStatus)}
+          >
+            {parcel?.currentStatus?.replace("_", " ")?.toUpperCase()}
           </Badge>
         </div>
-        <CardDescription>Tracking ID: {parcel.trackingId}</CardDescription>
+        <CardDescription>Tracking ID: {parcel?.trackingId}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -50,14 +61,14 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
               <User className="mr-2 h-4 w-4" />
               Receiver Information
             </h3>
-            <p>{parcel.receiverName}</p>
+            <p>{parcel?.receiver?.name}</p>
             <p className="flex items-center text-sm text-muted-foreground">
               <MapPin className="mr-2 h-4 w-4" />
-              {parcel.receiverAddress}
+              {parcel?.receiver?.address}
             </p>
             <p className="flex items-center text-sm text-muted-foreground">
               <Phone className="mr-2 h-4 w-4" />
-              {parcel.receiverPhone}
+              {parcel?.receiver?.phone}
             </p>
           </div>
 
@@ -66,15 +77,19 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
               <Package className="mr-2 h-4 w-4" />
               Parcel Information
             </h3>
-            <p>Weight: {parcel.weight} kg</p>
-            {parcel.description && (
+            <p>Weight: {parcel?.packageDetails?.weight} kg</p>
+            {parcel?.packageDetails?.description && (
               <p className="text-sm text-muted-foreground">
-                {parcel.description}
+                {parcel?.packageDetails?.description}
               </p>
             )}
             <p className="flex items-center text-sm text-muted-foreground">
+              <SquareLibrary className="mr-2 h-4 w-4" />
+              Type: {parcel?.packageDetails?.type}
+            </p>
+            <p className="flex items-center text-sm text-muted-foreground">
               <Calendar className="mr-2 h-4 w-4" />
-              Created: {new Date(parcel.createdAt).toLocaleDateString()}
+              Created: {new Date(parcel?.createdAt).toLocaleDateString()}
             </p>
           </div>
         </div>
@@ -84,16 +99,16 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
         <div>
           <h3 className="font-medium mb-2">Status History</h3>
           <div className="space-y-2">
-            {parcel.statusHistory.map((status, index) => (
+            {parcel?.statusLog?.map((status, index) => (
               <div key={index} className="flex items-center">
                 <div className="flex-shrink-0 w-2 h-2 rounded-full bg-primary mr-3"></div>
                 <div>
                   <p className="text-sm font-medium">
-                    {status.status.replace("_", " ").toUpperCase()}
+                    {status?.status?.replace("_", " ").toUpperCase()}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(status.timestamp).toLocaleString()}
-                    {status.note && ` • ${status.note}`}
+                    {new Date(status?.timestamp).toLocaleString()}
+                    {status?.note && ` • ${status?.note}`}
                   </p>
                 </div>
               </div>

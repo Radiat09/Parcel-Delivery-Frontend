@@ -38,4 +38,5 @@ export const {
   useCreateParcelMutation,
   useGetAllParcelsQuery,
   useUpdateParcelMutation,
+  useLazyGetAllParcelsQuery,
 } = authApi;

@@ -124,7 +124,6 @@ export default function ManageParcel() {
       if (Object.keys(changes)?.length > 0) {
         await parcelUpdater(trkId, data);
         // Don't reset editedParcel here - let the parent component update the parcel prop
-        // setEditedParcel({ ...viewParcel });
       }
     }
   };
@@ -316,7 +315,7 @@ export default function ManageParcel() {
                   {data?.data?.map((parcel: IParcel) => (
                     <TableRow key={parcel._id}>
                       <TableCell className="font-medium">
-                        {parcel.trackingId}
+                        {parcel?.trackingId}
                       </TableCell>
                       <TableCell>
                         <div>

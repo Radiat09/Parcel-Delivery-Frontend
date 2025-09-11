@@ -28,7 +28,7 @@ const ParcelTracker: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-2xl my-10 mx-auto">
       <CardHeader>
         <CardTitle>Track Your Parcel</CardTitle>
         <CardDescription>

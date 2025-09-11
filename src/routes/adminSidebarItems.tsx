@@ -1,10 +1,10 @@
 import CreateParcelForm from "@/components/Parcel/CreateParcelForm";
-import ParcelTracker from "@/components/Parcel/ParcelTracker";
 import ManageParcel from "@/pages/Admin/ManageParcel";
 import { User } from "@/pages/Admin/User";
 import type { ISidebarItems } from "@/types";
+import { lazy } from "react";
 
-// const Analytics = lazy(() => import("@/pages/Admin/Analytics"));
+const ParcelTracker = lazy(() => import("@/components/Parcel/ParcelTracker"));
 
 export const adminSidebarItems: ISidebarItems[] = [
   {

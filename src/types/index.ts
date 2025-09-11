@@ -24,15 +24,7 @@ export type TRole =
   | "DELIVERY_MAN";
 
 export type TStatus = "ACTIVE" | "INACTIVE" | "BLOCKED";
-export type TRole =
-  | "SUPER_ADMIN"
-  | "ADMIN"
-  | "USER"
-  | "SENDER"
-  | "RECIVER"
-  | "DELIVERY_MAN";
 
-export type TStatus = "ACTIVE" | "INACTIVE" | "BLOCKED";
 // types/index.ts
 interface AuthProvider {
   provider: string;

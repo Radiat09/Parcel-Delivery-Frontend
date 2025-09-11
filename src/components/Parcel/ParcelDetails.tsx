@@ -1,4 +1,3 @@
-// components/parcels/ParcelDetails.tsx
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -8,6 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { IParcel } from "@/types/parcel.type";
 import {
   Calendar,
@@ -18,13 +18,16 @@ import {
   User,
 } from "lucide-react";
 import React from "react";
+import FormattedDate from "../modules/FormattedDate";
+import StatusTimeline from "./StatusTimeline";
 
 interface ParcelDetailsProps {
   parcel: IParcel;
 }
 
 const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
-  console.log(parcel);
+  const { data } = useUserInfoQuery(undefined);
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case "delivered":
@@ -56,21 +59,47 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
       </CardHeader>
       <CardContent className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="space-y-2">
-            <h3 className="font-medium flex items-center">
-              <User className="mr-2 h-4 w-4" />
-              Receiver Information
-            </h3>
-            <p>{parcel?.receiver?.name}</p>
-            <p className="flex items-center text-sm text-muted-foreground">
-              <MapPin className="mr-2 h-4 w-4" />
-              {parcel?.receiver?.address}
-            </p>
-            <p className="flex items-center text-sm text-muted-foreground">
-              <Phone className="mr-2 h-4 w-4" />
-              {parcel?.receiver?.phone}
-            </p>
-          </div>
+          {data?.data?.role === "SENDER" && (
+            <div className="space-y-2">
+              <h3 className="font-medium flex items-center">
+                <User className="mr-2 h-4 w-4" />
+                Receiver Information
+              </h3>
+              <p>{parcel?.receiver?.name}</p>
+              <p className="flex items-center text-sm text-muted-foreground">
+                <MapPin className="mr-2 h-4 w-4" />
+                {parcel?.receiver?.address}
+              </p>
+              <p className="flex items-center text-sm text-muted-foreground">
+                <Phone className="mr-2 h-4 w-4" />
+                {parcel?.receiver?.phone}
+              </p>
+            </div>
+          )}
+          {data?.data?.role === "RECIVER" && (
+            <CardContent>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <p className="text-xs text-muted-foreground">From</p>
+                  <p className="text-sm font-medium">{parcel?.sender?.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-muted-foreground">
+                    Estimated Delivery
+                  </p>
+                  <p className="text-sm font-medium">
+                    <FormattedDate dateString={parcel?.expectedDeliveryDate} />
+                  </p>
+                </div>
+                <div className="col-span-2">
+                  <p className="text-xs text-muted-foreground">Description</p>
+                  <p className="text-sm font-medium">
+                    {parcel?.packageDetails?.description}
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          )}
 
           <div className="space-y-2">
             <h3 className="font-medium flex items-center">
@@ -95,6 +124,41 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
         </div>
 
         <Separator />
+        <Card>
+          <CardHeader>
+            <CardTitle>Delivery Timeline</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <StatusTimeline status={parcel?.currentStatus} className="mb-6" />
+
+            <div className="space-y-2">
+              <h3 className="font-medium">Delivery Updates</h3>
+              {parcel?.statusLog && parcel?.statusLog?.length > 0 ? (
+                <div className="space-y-2">
+                  {parcel?.statusLog?.map((update, index) => (
+                    <div key={index} className="flex items-start">
+                      <div className="flex-shrink-0 w-2 h-2 mt-2 rounded-full bg-primary mr-3"></div>
+                      <div>
+                        <p className="text-sm font-medium capitalize">
+                          {update?.status?.replace("_", " ")}
+                        </p>
+                        <p className="text-xs text-muted-foreground">
+                          <FormattedDate dateString={update?.createdAt} />
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-muted-foreground">
+                  No status updates available.
+                </p>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Separator />
 
         <div>
           <h3 className="font-medium mb-2">Status History</h3>
@@ -107,7 +171,7 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
                     {status?.status?.replace("_", " ").toUpperCase()}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {new Date(status?.timestamp).toLocaleString()}
+                    {new Date(status?.createdAt).toLocaleString()}
                     {status?.note && ` • ${status?.note}`}
                   </p>
                 </div>

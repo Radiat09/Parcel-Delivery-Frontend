@@ -1,5 +1,7 @@
 import { role } from "@/constants/role";
 import { adminSidebarItems } from "@/routes/adminSidebarItems";
+import { reciverSidebarItems } from "@/routes/reciverSidebarItems";
+import { SenderSidebarItems } from "@/routes/senderSidebarItems";
 import { userSidebarItems } from "@/routes/userSidebarItems";
 import type { TRole } from "@/types";
 
@@ -11,6 +13,10 @@ export const getSidebarItems = (userRole: TRole) => {
 
     case role.user:
       return [...userSidebarItems];
+    case role.sender:
+      return [...SenderSidebarItems];
+    case role.reciver:
+      return [...reciverSidebarItems];
 
     default:
       return [];

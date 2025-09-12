@@ -108,7 +108,25 @@ Project Structure
 -----------------
 
 ```
-src/  ├── components/          # Reusable UI components  │   ├── common/         # Common components (buttons, modals, etc.)  │   ├── layout/         # Layout components (header, sidebar, etc.)  │   └── parcels/        # Parcel-related components  ├── features/           # Redux Toolkit feature slices  │   ├── auth/           # Authentication slice  │   ├── parcels/        # Parcel management slice  │   └── users/          # User management slice (admin)  ├── pages/              # Page components  │   ├── public/         # Public pages (home, about, contact)  │   ├── auth/           # Authentication pages  │   └── dashboard/      # Role-specific dashboards  ├── services/           # API service definitions  ├── hooks/              # Custom React hooks  ├── utils/              # Utility functions  ├── types/              # TypeScript type definitions  └── assets/             # Static assets (images, icons)
+src/
+├── components/          # Reusable UI components
+│   ├── common/         # Common components (buttons, modals, etc.)
+│   ├── layout/         # Layout components (header, sidebar, etc.)
+│   └── parcels/        # Parcel-related components
+├── features/           # Redux Toolkit feature slices
+│   ├── auth/           # Authentication slice
+│   ├── parcels/        # Parcel management slice
+│   └── users/          # User management slice (admin)
+├── pages/              # Page components
+│   ├── public/         # Public pages (home, about, contact)
+│   ├── auth/           # Authentication pages
+│   └── dashboard/      # Role-specific dashboards
+├── services/           # API service definitions
+├── hooks/              # Custom React hooks
+├── utils/              # Utility functions
+├── types/              # TypeScript type definitions
+└── assets/             # Static assets (images, icons)
+
 ```
 
 Setup Instructions

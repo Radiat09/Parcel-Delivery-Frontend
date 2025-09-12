@@ -77,10 +77,9 @@ cd parcel-delivery-frontend
 ```
 
 1.  Install dependencies:
-
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML` npm install  # or  yarn install `
+```bash
+ npm install  # or  yarn install
+```
 
 1.  Configure environment variables:
 

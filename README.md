@@ -104,10 +104,28 @@ npm start  # or  yarn start
 1.  Open [http://localhost:3000](http://localhost:3000/) to view the application.
 
 ## 🏗️ Project Structure
-
-text
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML` src/  ├── components/          # Reusable UI components  │   ├── common/         # Common components (buttons, modals, etc.)  │   ├── layout/         # Layout components (header, sidebar, etc.)  │   ├── auth/           # Authentication components  │   ├── parcels/        # Parcel-related components  │   └── charts/         # Data visualization components  ├── features/           # Redux Toolkit feature slices  │   ├── auth/           # Authentication slice  │   ├── parcels/        # Parcel management slice  │   ├── users/          # User management slice  │   └── dashboard/      # Dashboard slice  ├── pages/              # Page components  │   ├── public/         # Public pages (home, about, contact)  │   ├── auth/           # Authentication pages  │   └── dashboard/      # Role-specific dashboards  ├── services/           # API service definitions  ├── hooks/              # Custom React hooks  ├── utils/              # Utility functions  ├── types/              # TypeScript type definitions  ├── constants/          # Application constants  └── assets/             # Static assets (images, icons) `
+src/
+├── components/          # Reusable UI components
+│   ├── common/         # Common components (buttons, modals, etc.)
+│   ├── layout/         # Layout components (header, sidebar, etc.)
+│   ├── auth/           # Authentication components
+│   ├── parcels/        # Parcel-related components
+│   └── charts/         # Data visualization components
+├── features/           # Redux Toolkit feature slices
+│   ├── auth/           # Authentication slice
+│   ├── parcels/        # Parcel management slice
+│   ├── users/          # User management slice
+│   └── dashboard/      # Dashboard slice
+├── pages/              # Page components
+│   ├── public/         # Public pages (home, about, contact)
+│   ├── auth/           # Authentication pages
+│   └── dashboard/      # Role-specific dashboards
+├── services/           # API service definitions
+├── hooks/              # Custom React hooks
+├── utils/              # Utility functions
+├── types/              # TypeScript type definitions
+├── constants/          # Application constants
+└── assets/             # Static assets (images, icons)
 
 ## 🚀 Usage
 

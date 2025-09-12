@@ -2,7 +2,7 @@
 
 A modern, responsive web application for managing parcel deliveries, built with React, TypeScript, Redux Toolkit, and RTK Query.
 
-[https://img.shields.io/badge/Parcel-Delivery-blue](https://img.shields.io/badge/Parcel-Delivery-blue) [https://img.shields.io/badge/React-18.2.0-blue](https://img.shields.io/badge/React-18.2.0-blue) [https://img.shields.io/badge/TypeScript-5.0-blue](https://img.shields.io/badge/TypeScript-5.0-blue) [https://img.shields.io/badge/Redux_Toolkit-1.9.0-purple](https://img.shields.io/badge/Redux_Toolkit-1.9.0-purple) [https://img.shields.io/badge/RTK_Query-1.9.0-purple](https://img.shields.io/badge/RTK_Query-1.9.0-purple) [https://img.shields.io/badge/Tailwind_CSS-3.3.0-blue](https://img.shields.io/badge/Tailwind_CSS-3.3.0-blue)
+[https://img.shields.io/badge/Parcel-Delivery-blue](https://img.shields.io/badge/Parcel-Delivery-blue)[https://img.shields.io/badge/React-18.2.0-blue](https://img.shields.io/badge/React-18.2.0-blue) [https://img.shields.io/badge/TypeScript-5.0-blue](https://img.shields.io/badge/TypeScript-5.0-blue) [https://img.shields.io/badge/Redux_Toolkit-1.9.0-purple](https://img.shields.io/badge/Redux_Toolkit-1.9.0-purple) [https://img.shields.io/badge/RTK_Query-1.9.0-purple](https://img.shields.io/badge/RTK_Query-1.9.0-purple) [https://img.shields.io/badge/Tailwind_CSS-3.3.0-blue](https://img.shields.io/badge/Tailwind_CSS-3.3.0-blue)
 
 ## 🚀 Features
 
@@ -71,9 +71,7 @@ A modern, responsive web application for managing parcel deliveries, built with 
 
 1.  Clone the repository:
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML` git clone   cd parcel-delivery-frontend `
+bash` git clone   cd parcel-delivery-frontend `
 
 1.  Install dependencies:
 

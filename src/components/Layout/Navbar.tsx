@@ -210,6 +210,7 @@ const navigationLinks = [
   { href: "/user", label: "Dashboard", role: role?.user },
   { href: "/sender", label: "Dashboard", role: role?.sender },
   { href: "/reciver", label: "Dashboard", role: role?.reciver },
+  { href: "/delivery", label: "Dashboard", role: role?.DELIVERY_MAN },
 ];
 
 export default function Navbar() {

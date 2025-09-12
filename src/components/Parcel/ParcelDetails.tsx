@@ -7,10 +7,13 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { withAsyncHandler } from "@/hooks/eventHandler";
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { useUpdateParcelMutation } from "@/redux/features/parcel/parcel.api";
 import { IParcel } from "@/types/parcel.type";
 import {
   Calendar,
+  Loader,
   MapPin,
   Package,
   Phone,
@@ -19,6 +22,7 @@ import {
 } from "lucide-react";
 import React from "react";
 import FormattedDate from "../modules/FormattedDate";
+import Button from "../ui/button";
 import StatusTimeline from "./StatusTimeline";
 
 interface ParcelDetailsProps {
@@ -27,6 +31,9 @@ interface ParcelDetailsProps {
 
 const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
   const { data } = useUserInfoQuery(undefined);
+
+  const [updateParcel, { isLoading: isUpdateParcelLoading }] =
+    useUpdateParcelMutation();
 
   const getStatusColor = (status: string) => {
     switch (status) {
@@ -41,6 +48,20 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
       default:
         return "bg-gray-100 text-gray-800";
     }
+  };
+
+  const parcelUpdateHandler = withAsyncHandler(
+    (data: { trkId: string; data: Partial<IParcel> }) => updateParcel(data),
+    {
+      loadingMessage: "Confirming Parcel Delivery",
+      successMessage: "Parcel confirmed successfully!",
+      showSuccess: true,
+      showError: true,
+    }
+  );
+
+  const parcelUpdater = async (trkId: string, data: Partial<IParcel>) => {
+    await parcelUpdateHandler({ trkId, data });
   };
 
   return (
@@ -159,7 +180,26 @@ const ParcelDetails: React.FC<ParcelDetailsProps> = ({ parcel }) => {
         </Card>
 
         <Separator />
-
+        <div className="flex items-center justify-end">
+          {parcel?.currentStatus === "IN_TRANSIT" &&
+            data?.data?.role === "RECIVER" && (
+              <Button
+                disabled={isUpdateParcelLoading}
+                onClick={async () => {
+                  await parcelUpdater(parcel?.trackingId, {
+                    currentStatus: "DELIVERED",
+                  });
+                }}
+              >
+                {isUpdateParcelLoading ? (
+                  <Loader className="animate-spin" />
+                ) : (
+                  "Confirm Delivery"
+                )}
+              </Button>
+            )}
+        </div>
+        <Separator />
         <div>
           <h3 className="font-medium mb-2">Status History</h3>
           <div className="space-y-2">

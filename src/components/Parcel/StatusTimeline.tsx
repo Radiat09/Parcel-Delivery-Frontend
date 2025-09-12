@@ -5,7 +5,6 @@ import {
   Home,
   Package,
   PackageCheck,
-  PackageSearch,
   Truck,
   Undo2,
   X,
@@ -21,8 +20,8 @@ const StatusTimeline: React.FC<StatusTimelineProps> = ({
   status,
   className,
 }) => {
-  const isCancelled = status === "cancelled";
-  const isReturned = status === "returned";
+  const isCancelled = status === "CANCELLED";
+  const isReturned = status === "RETURNED";
   const isTerminalStatus = isCancelled || isReturned;
 
   // Regular status steps (excluding terminal statuses)
@@ -30,8 +29,7 @@ const StatusTimeline: React.FC<StatusTimelineProps> = ({
     { key: "REQUESTED", label: "Pending", icon: Clock },
     { key: "APPROVED", label: "Processing", icon: Package },
     { key: "PICKED", label: "Picked", icon: PackageCheck },
-    { key: "in_transit", label: "In Transit", icon: PackageSearch },
-    { key: "out_for_delivery", label: "Out for Delivery", icon: Truck },
+    { key: "IN_TRANSIT", label: "Out for Delivery", icon: Truck },
     { key: "DELIVERED", label: "Delivered", icon: Home },
   ];
 

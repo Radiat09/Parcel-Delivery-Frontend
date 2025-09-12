@@ -12,6 +12,7 @@ import { generateRoutes } from "@/utils/generateRoutes";
 import { withAuth } from "@/utils/withAuth";
 import { createBrowserRouter, Navigate } from "react-router";
 import { adminSidebarItems } from "./adminSidebarItems";
+import { deliverymanSidebarItems } from "./deliverymanSidebarItems";
 import { reciverSidebarItems } from "./reciverSidebarItems";
 import { SenderSidebarItems } from "./senderSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
@@ -68,6 +69,14 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/reciver/all-parcel" /> },
       ...generateRoutes(reciverSidebarItems),
+    ],
+  },
+  {
+    Component: withAuth(DashboardLayout, role.DELIVERY_MAN as TRole),
+    path: "/delivery",
+    children: [
+      { index: true, element: <Navigate to="/delivery/parcels" /> },
+      ...generateRoutes(deliverymanSidebarItems),
     ],
   },
   {

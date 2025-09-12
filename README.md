@@ -71,7 +71,7 @@ A modern, responsive web application for managing parcel deliveries, built with 
 
 1.  Clone the repository:
 
-bash` git clone   cd parcel-delivery-frontend `
+bash``` git clone   cd parcel-delivery-frontend ```
 
 1.  Install dependencies:
 

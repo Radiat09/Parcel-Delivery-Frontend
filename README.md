@@ -1,16 +1,28 @@
-Parcel Delivery Frontend
-========================
+Parcel Delivery Frontend (React + Redux Toolkit + RTK Query)
+============================================================
 
-A modern, responsive web application for managing parcel deliveries, built with React, TypeScript, Redux Toolkit, and RTK Query.
+Project Overview
+----------------
 
-[https://img.shields.io/badge/Parcel-Delivery-blue](https://img.shields.io/badge/Parcel-Delivery-blue) [https://img.shields.io/badge/React-18.2.0-blue](https://img.shields.io/badge/React-18.2.0-blue) [https://img.shields.io/badge/TypeScript-5.0-blue](https://img.shields.io/badge/TypeScript-5.0-blue) [https://img.shields.io/badge/Redux\_Toolkit-1.9.0-purple](https://img.shields.io/badge/Redux_Toolkit-1.9.0-purple) [https://img.shields.io/badge/RTK\_Query-1.9.0-purple](https://img.shields.io/badge/RTK_Query-1.9.0-purple) [https://img.shields.io/badge/Tailwind\_CSS-3.3.0-blue](https://img.shields.io/badge/Tailwind_CSS-3.3.0-blue)
+A secure, role-based frontend application for a Parcel Delivery System built with React.js, Redux Toolkit, and RTK Query. This application connects to a Node.js/Express backend to provide a seamless experience for Senders, Receivers, and Administrators to manage parcel deliveries.
 
-🚀 Features
------------
+Features
+--------
 
-### 🔐 Authentication System
+### 🔓 Public Section
 
-*   JWT-based authentication with secure login/logout
+*   Landing page with service information
+    
+*   About page with company details
+    
+*   Contact form for inquiries
+    
+*   Public parcel tracking
+    
+
+### 🔐 Authentication
+
+*   JWT-based login/logout
     
 *   Role-based registration (Sender/Receiver)
     
@@ -19,24 +31,35 @@ A modern, responsive web application for managing parcel deliveries, built with 
 *   Protected routes based on user roles
     
 
-### 📦 Parcel Management
+### 📦 Sender Dashboard
 
-*   Create and manage parcel delivery requests
+*   Create new parcel delivery requests
     
-*   Track parcels with unique tracking IDs
-    
-*   Status updates with detailed history logs
+*   View all created parcels with status tracking
     
 *   Cancel parcels (if not dispatched)
     
-
-### 👥 Role-Based Dashboards
-
-*   **Sender Dashboard**: Create and track outgoing parcels
+*   Parcel status history and timeline
     
-*   **Receiver Dashboard**: View and confirm incoming deliveries
+
+### 📬 Receiver Dashboard
+
+*   View incoming parcels
     
-*   **Admin Dashboard**: Manage users, parcels, and system analytics
+*   Confirm parcel delivery
+    
+*   Delivery history tracking
+    
+
+### ⚙️ Admin Dashboard
+
+*   User management (view, block/unblock)
+    
+*   Parcel management (view, update status)
+    
+*   Delivery personnel assignment (optional)
+    
+*   System analytics and reporting
     
 
 ### 📊 Data Visualization
@@ -45,66 +68,62 @@ A modern, responsive web application for managing parcel deliveries, built with 
     
 *   Charts showing delivery trends and status distribution
     
-*   Interactive data tables with pagination and filtering
+*   Paginated, searchable, and filterable data tables
     
 *   Visual status timeline for parcels
     
 
-### 📱 Responsive Design
-
-*   Mobile-first approach with Tailwind CSS
-    
-*   Consistent UI across all device sizes
-    
-*   Accessible components with proper contrast
-    
-
-🛠️ Technology Stack
---------------------
+Tech Stack
+----------
 
 ### Frontend
 
-*   **React 18** with TypeScript
+*   **React** with TypeScript
     
 *   **Redux Toolkit** for state management
     
 *   **RTK Query** for API integration
     
-*   **React Router v6** for navigation
+*   **React Router** for navigation
     
 *   **Tailwind CSS** for styling
     
-*   **React Hook Form** for form handling
+*   **Chart.js/Recharts** for data visualization (optional)
     
-*   **React Toastify** for notifications
+*   **React Hook Form** for form handling (optional)
     
-*   **Recharts** for data visualization
+*   **React Toastify** for notifications (optional)
     
 
-### Backend API
+### Backend (Reference)
 
 *   Node.js/Express REST API
     
-*   MongoDB with Mongoose ODM
+*   MongoDB/Mongoose for data storage
     
-*   JWT authentication with bcrypt
-    
-*   Role-based authorization
+*   JWT + bcrypt for authentication
     
 
-📦 Installation
----------------
+Project Structure
+-----------------
+
+text
+
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   src/  ├── components/          # Reusable UI components  │   ├── common/         # Common components (buttons, modals, etc.)  │   ├── layout/         # Layout components (header, sidebar, etc.)  │   └── parcels/        # Parcel-related components  ├── features/           # Redux Toolkit feature slices  │   ├── auth/           # Authentication slice  │   ├── parcels/        # Parcel management slice  │   └── users/          # User management slice (admin)  ├── pages/              # Page components  │   ├── public/         # Public pages (home, about, contact)  │   ├── auth/           # Authentication pages  │   └── dashboard/      # Role-specific dashboards  ├── services/           # API service definitions  ├── hooks/              # Custom React hooks  ├── utils/              # Utility functions  ├── types/              # TypeScript type definitions  └── assets/             # Static assets (images, icons)   `
+
+Setup Instructions
+------------------
 
 ### Prerequisites
 
-*   Node.js (v16 or higher)
+*   Node.js (v14 or higher)
     
 *   npm or yarn package manager
     
-*   Backend API server running
+*   Backend API server (see backend repository)
     
 
-### Setup Instructions
+### Installation
 
 1.  Clone the repository:
     
@@ -120,7 +139,7 @@ bash
 
 Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   npm install  # or  yarn install   `
 
-1.  Configure environment variables:
+1.  Create environment configuration:
     
 
 bash
@@ -129,9 +148,9 @@ Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQL
 
 Edit the .env file with your configuration:
 
-env
+text
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   REACT_APP_API_BASE_URL=http://localhost:5000/api  REACT_APP_APP_NAME=Parcel Delivery System  REACT_APP_DEFAULT_TIMEOUT=5000   `
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   REACT_APP_API_BASE_URL=http://localhost:5000/api  REACT_APP_APP_NAME=Parcel Delivery System   `
 
 1.  Start the development server:
     
@@ -143,58 +162,16 @@ Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQL
 1.  Open [http://localhost:3000](http://localhost:3000/) to view the application.
     
 
-🏗️ Project Structure
----------------------
+### Building for Production
 
-text
+bash
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   src/  ├── components/          # Reusable UI components  │   ├── common/         # Common components (buttons, modals, etc.)  │   ├── layout/         # Layout components (header, sidebar, etc.)  │   ├── auth/           # Authentication components  │   ├── parcels/        # Parcel-related components  │   └── charts/         # Data visualization components  ├── features/           # Redux Toolkit feature slices  │   ├── auth/           # Authentication slice  │   ├── parcels/        # Parcel management slice  │   ├── users/          # User management slice  │   └── dashboard/      # Dashboard slice  ├── pages/              # Page components  │   ├── public/         # Public pages (home, about, contact)  │   ├── auth/           # Authentication pages  │   └── dashboard/      # Role-specific dashboards  ├── services/           # API service definitions  ├── hooks/              # Custom React hooks  ├── utils/              # Utility functions  ├── types/              # TypeScript type definitions  ├── constants/          # Application constants  └── assets/             # Static assets (images, icons)   `
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   npm run build  # or  yarn build   `
 
-🚀 Usage
---------
+This creates a build folder with optimized production files.
 
-### As a Sender
-
-1.  Register/Login with Sender role
-    
-2.  Create parcel delivery requests with recipient details
-    
-3.  Track your parcels and view status history
-    
-4.  Cancel parcels if not yet dispatched
-    
-
-### As a Receiver
-
-1.  Register/Login with Receiver role
-    
-2.  View incoming parcels awaiting delivery
-    
-3.  Confirm delivery of received parcels
-    
-4.  View delivery history
-    
-
-### As an Admin
-
-1.  Login with admin credentials
-    
-2.  Manage users (view, block/unblock)
-    
-3.  Manage parcels (update status, view all records)
-    
-4.  View system analytics and reports
-    
-
-### Public Tracking
-
-*   Search parcels by tracking ID without authentication
-    
-*   View parcel status and delivery progress
-    
-
-📋 Available Scripts
---------------------
+Available Scripts
+-----------------
 
 *   npm start - Runs the app in development mode
     
@@ -202,23 +179,15 @@ Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQL
     
 *   npm run build - Builds the app for production
     
-*   npm run lint - Runs ESLint for code quality
-    
-*   npm run type-check - Runs TypeScript compiler check
+*   npm run eject - Ejects from Create React App (one-way operation)
     
 
-🚀 Deployment
--------------
+Deployment
+----------
 
-### Build for Production
+The application can be deployed to various platforms:
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   npm run build   `
-
-This creates a build folder with optimized production files.
-
-### Deploy to Vercel
+### Vercel
 
 1.  Install Vercel CLI: npm i -g vercel
     
@@ -227,7 +196,7 @@ This creates a build folder with optimized production files.
 3.  Follow the prompts to deploy
     
 
-### Deploy to Netlify
+### Netlify
 
 1.  Build the project: npm run build
     
@@ -236,19 +205,44 @@ This creates a build folder with optimized production files.
 3.  Or connect your repository for continuous deployment
     
 
-### Environment Variables for Production
+### Other Platforms
 
-Ensure these environment variables are set in your deployment platform:
+The application can be deployed to any static hosting service that supports SPAs (Single Page Applications).
 
-*   REACT\_APP\_API\_BASE\_URL - Your backend API URL
-    
-*   REACT\_APP\_APP\_NAME - Application name
-    
-*   REACT\_APP\_DEFAULT\_TIMEOUT - API timeout setting
-    
+Usage
+-----
 
-🤝 Contributing
----------------
+1.  **As a Sender**:
+    
+    *   Register/Login with Sender role
+        
+    *   Create parcel delivery requests
+        
+    *   Track your parcels and view status history
+        
+    *   Cancel parcels if not yet dispatched
+        
+2.  **As a Receiver**:
+    
+    *   Register/Login with Receiver role
+        
+    *   View incoming parcels
+        
+    *   Confirm delivery of received parcels
+        
+3.  **As an Admin**:
+    
+    *   Login with admin credentials
+        
+    *   Manage users and parcels
+        
+    *   Update delivery statuses
+        
+    *   View system analytics
+        
+
+Contributing
+------------
 
 1.  Fork the repository
     
@@ -261,31 +255,18 @@ Ensure these environment variables are set in your deployment platform:
 5.  Submit a pull request
     
 
-### Development Guidelines
+License
+-------
 
-*   Follow TypeScript best practices
-    
-*   Use Redux Toolkit and RTK Query for state management
-    
-*   Ensure responsive design with Tailwind CSS
-    
-*   Write meaningful commit messages
-    
-*   Add appropriate documentation for new features
-    
+This project is licensed under the MIT License.
 
-📝 License
-----------
-
-This project is licensed under the MIT License - see the [LICENSE](https://license/) file for details.
-
-🆘 Support
-----------
+Support
+-------
 
 For support, please open an issue in the GitHub repository or contact the development team.
 
-🙏 Acknowledgments
-------------------
+Acknowledgments
+---------------
 
 *   Icons from [Heroicons](https://heroicons.com/)
     

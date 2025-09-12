@@ -123,7 +123,6 @@ export default function ManageParcel() {
       // Only proceed if there are actual changes
       if (Object.keys(changes)?.length > 0) {
         await parcelUpdater(trkId, data);
-        // Don't reset editedParcel here - let the parent component update the parcel prop
       }
     }
   };

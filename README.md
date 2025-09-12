@@ -71,7 +71,10 @@ A modern, responsive web application for managing parcel deliveries, built with 
 
 1.  Clone the repository:
 
-bash``` git clone   cd parcel-delivery-frontend ```
+```bash 
+git clone
+cd parcel-delivery-frontend
+```
 
 1.  Install dependencies:
 
@@ -81,21 +84,23 @@ Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQL
 
 1.  Configure environment variables:
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML` cp .env.example .env `
+```bash
+cp .env.example .env
+```
 
 Edit the .env file with your configuration:
 
-env
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML` REACT_APP_API_BASE_URL=http://localhost:5000/api  REACT_APP_APP_NAME=Parcel Delivery System  REACT_APP_DEFAULT_TIMEOUT=5000 `
+```bash
+REACT_APP_API_BASE_URL=http://localhost:5000/api
+REACT_APP_APP_NAME=Parcel Delivery System
+REACT_APP_DEFAULT_TIMEOUT=5000
+```
 
 1.  Start the development server:
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML` npm start  # or  yarn start `
+```bash
+npm start  # or  yarn start
+```
 
 1.  Open [http://localhost:3000](http://localhost:3000/) to view the application.
 

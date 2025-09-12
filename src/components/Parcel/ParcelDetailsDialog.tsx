@@ -62,7 +62,8 @@ export function ParcelDetailsDialog({
     if (parcel) {
       setEditedParcel({ ...parcel });
     }
-  }, [parcel, open]);
+  }, [parcel, open, setEditedParcel]);
+
 
   const handleSave = async () => {
     await onUpdateParcel();

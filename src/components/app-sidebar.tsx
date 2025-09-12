@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
 import { getSidebarItems } from "@/utils/getSidebarItems";
+import { Package } from "lucide-react";
 import * as React from "react";
 import { Link } from "react-router";
 
@@ -25,8 +26,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader className="items-start mb-2 mt-1 ml-2">
-        {/* <Logo /> */}
-        LOGO
+        <Link
+          to="/"
+          className="flex items-center text-primary font-bold text-xl"
+        >
+          <Package className="w-8 h-8 mr-2" />
+          ParcelDelivery
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}

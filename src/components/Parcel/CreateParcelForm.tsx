@@ -174,7 +174,7 @@ const CreateParcelForm: React.FC = () => {
   };
 
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full mx-auto">
       <CardHeader>
         <CardTitle>Create New Parcel</CardTitle>
         <CardDescription>

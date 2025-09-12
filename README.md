@@ -107,9 +107,9 @@ Tech Stack
 Project Structure
 -----------------
 
-text
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   src/  ├── components/          # Reusable UI components  │   ├── common/         # Common components (buttons, modals, etc.)  │   ├── layout/         # Layout components (header, sidebar, etc.)  │   └── parcels/        # Parcel-related components  ├── features/           # Redux Toolkit feature slices  │   ├── auth/           # Authentication slice  │   ├── parcels/        # Parcel management slice  │   └── users/          # User management slice (admin)  ├── pages/              # Page components  │   ├── public/         # Public pages (home, about, contact)  │   ├── auth/           # Authentication pages  │   └── dashboard/      # Role-specific dashboards  ├── services/           # API service definitions  ├── hooks/              # Custom React hooks  ├── utils/              # Utility functions  ├── types/              # TypeScript type definitions  └── assets/             # Static assets (images, icons)   `
+```
+src/  ├── components/          # Reusable UI components  │   ├── common/         # Common components (buttons, modals, etc.)  │   ├── layout/         # Layout components (header, sidebar, etc.)  │   └── parcels/        # Parcel-related components  ├── features/           # Redux Toolkit feature slices  │   ├── auth/           # Authentication slice  │   ├── parcels/        # Parcel management slice  │   └── users/          # User management slice (admin)  ├── pages/              # Page components  │   ├── public/         # Public pages (home, about, contact)  │   ├── auth/           # Authentication pages  │   └── dashboard/      # Role-specific dashboards  ├── services/           # API service definitions  ├── hooks/              # Custom React hooks  ├── utils/              # Utility functions  ├── types/              # TypeScript type definitions  └── assets/             # Static assets (images, icons)
+```
 
 Setup Instructions
 ------------------
@@ -128,45 +128,44 @@ Setup Instructions
 1.  Clone the repository:
     
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   git clone   cd parcel-delivery-frontend   `
+```bash
+git clone
+cd parcel-delivery-frontend
+```
 
 1.  Install dependencies:
     
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   npm install  # or  yarn install   `
+```bash
+npm install  # or  yarn install
+```
 
 1.  Create environment configuration:
-    
-
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   cp .env.example .env   `
+    ```bash
+    cp .env.example .env
+    ```
 
 Edit the .env file with your configuration:
-
-text
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   REACT_APP_API_BASE_URL=http://localhost:5000/api  REACT_APP_APP_NAME=Parcel Delivery System   `
+```bash   
+REACT_APP_API_BASE_URL=http://localhost:5000/api
+REACT_APP_APP_NAME=Parcel Delivery System
+```
 
 1.  Start the development server:
     
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   npm start  # or  yarn start   `
+```bash 
+npm start  # or  yarn start
+```
 
 1.  Open [http://localhost:3000](http://localhost:3000/) to view the application.
     
 
 ### Building for Production
 
-bash
-
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   npm run build  # or  yarn build   `
+```bash
+npm run build  # or  yarn build
+```
 
 This creates a build folder with optimized production files.
 
@@ -258,18 +257,18 @@ Contributing
 License
 -------
 
-This project is licensed under the MIT License.
+This project is licensed under the MY License.
 
 Support
 -------
 
-For support, please open an issue in the GitHub repository or contact the development team.
+For support, please open an issue in the GitHub repository or contact the me.
 
 Acknowledgments
 ---------------
 
-*   Icons from [Heroicons](https://heroicons.com/)
+*   Icons from [LUCIDREACT](https://lucide.dev)
     
-*   UI inspiration from modern dashboard designs
+*   UI inspiration from modern dashboard designs Shadcn
     
 *   Backend team for API development

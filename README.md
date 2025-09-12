@@ -151,14 +151,14 @@ git clone
 cd parcel-delivery-frontend
 ```
 
-1.  Install dependencies:
+2.  Install dependencies:
     
 
 ```bash
 npm install  # or  yarn install
 ```
 
-1.  Create environment configuration:
+3. Create environment configuration:
     ```bash
     cp .env.example .env
     ```
@@ -169,14 +169,14 @@ REACT_APP_API_BASE_URL=http://localhost:5000/api
 REACT_APP_APP_NAME=Parcel Delivery System
 ```
 
-1.  Start the development server:
+4.  Start the development server:
     
 
 ```bash 
 npm start  # or  yarn start
 ```
 
-1.  Open [http://localhost:3000](http://localhost:3000/) to view the application.
+5.  Open [http://localhost:3000](http://localhost:3000/) to view the application.
     
 
 ### Building for Production

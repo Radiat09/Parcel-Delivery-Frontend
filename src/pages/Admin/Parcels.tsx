@@ -30,6 +30,11 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
+  useGetAllParcelsQuery,
+  useUpdateParcelMutation,
+} from "@/redux/features/parcel/parcel.api";
+import { IParcel } from "@/types/parcel.type";
+import {
   MoreHorizontal,
   Package,
   PackageCheck,
@@ -39,58 +44,38 @@ import {
   UserCheck,
   UserX,
 } from "lucide-react";
+import { useState } from "react";
 
 export const Parcel: React.FC = () => {
-  const { toast } = useToast();
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
-  const { data: parcels, isLoading, error, refetch } = useGetAllParcelsQuery();
+  const {
+    data: parcels,
+    isLoading,
+    error,
+    refetch,
+  } = useGetAllParcelsQuery(undefined);
   const [updateParcel] = useUpdateParcelMutation();
 
   const handleStatusChange = async (parcelId: string, status: string) => {
     try {
       await updateParcel({ id: parcelId, status }).unwrap();
-      toast({
-        title: "Status Updated",
-        description: `Parcel status has been updated to ${status}.`,
-      });
+
       refetch();
     } catch (err) {
-      toast({
-        title: "Error",
-        description: "Failed to update parcel status.",
-        variant: "destructive",
-      });
+      console.log(err);
     }
   };
 
   const handleBlockToggle = async (parcelId: string, isActive: boolean) => {
     try {
       await updateParcel({ id: parcelId, isActive }).unwrap();
-      toast({
-        title: isActive ? "Parcel Unblocked" : "Parcel Blocked",
-        description: `Parcel has been ${
-          isActive ? "unblocked" : "blocked"
-        } successfully.`,
-      });
+
       refetch();
     } catch (err) {
-      toast({
-        title: "Error",
-        description: "Failed to update parcel status.",
-        variant: "destructive",
-      });
+      console.log(err);
     }
   };
-
-  const filteredParcels = parcels?.filter((parcel) => {
-    const matchesSearch =
-      parcel.trackingNumber?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      parcel.recipientName?.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus =
-      statusFilter === "all" || parcel.status === statusFilter;
-    return matchesSearch && matchesStatus;
-  });
 
   if (isLoading) return <div>Loading parcels...</div>;
   if (error) return <div>Error loading parcels</div>;
@@ -142,32 +127,32 @@ export const Parcel: React.FC = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {filteredParcels?.map((parcel) => (
+            {parcels?.data?.map((parcel: IParcel) => (
               <TableRow key={parcel._id}>
                 <TableCell className="font-medium">
-                  {parcel.trackingNumber}
+                  {parcel.trackingId}
                 </TableCell>
-                <TableCell>{parcel.recipientName}</TableCell>
+                <TableCell>{parcel.receiver.name}</TableCell>
                 <TableCell>
                   <Badge
                     variant={
-                      parcel.status === "delivered"
+                      parcel.currentStatus === "DELIVERED"
                         ? "default"
-                        : parcel.status === "cancelled"
+                        : parcel.currentStatus === "CANCELLED"
                         ? "destructive"
                         : "secondary"
                     }
                   >
-                    {parcel.status.replace("_", " ")}
+                    {parcel.currentStatus.replace("_", " ")}
                   </Badge>
                 </TableCell>
-                <TableCell>
+                {/* <TableCell>
                   {parcel.deliveryPersonnel ? (
                     <span>{parcel.deliveryPersonnel.name}</span>
                   ) : (
                     <span className="text-muted-foreground">Not assigned</span>
                   )}
-                </TableCell>
+                </TableCell> */}
                 <TableCell>
                   {new Date(parcel.createdAt).toLocaleDateString()}
                 </TableCell>
@@ -212,7 +197,7 @@ export const Parcel: React.FC = () => {
                         Mark as Delivered
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
-                      {parcel.isActive ? (
+                      {!parcel.isBlocked ? (
                         <DropdownMenuItem
                           onClick={() => handleBlockToggle(parcel._id, false)}
                           className="text-destructive"

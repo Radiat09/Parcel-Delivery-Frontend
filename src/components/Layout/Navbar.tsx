@@ -196,8 +196,15 @@ import { Package } from "lucide-react";
 import { Link, useNavigate } from "react-router";
 import ThemeToggle from "../theme-toggle";
 
+interface link {
+  href: string;
+  label: string;
+  role?: string;
+  roles?: string[];
+}
+
 // Navigation links array to be used in both desktop and mobile menus
-const navigationLinks = [
+const navigationLinks: link[] = [
   { href: "/", label: "Home", role: "PUBLIC" },
   { href: "/about", label: "About", role: "PUBLIC" },
   { href: "/contact", label: "Contact", role: "PUBLIC" },
@@ -214,7 +221,7 @@ const navigationLinks = [
 ];
 
 export default function Navbar() {
-  const { data, isLoading, isError, refetch } = useUserInfoQuery(undefined);
+  const { data, isLoading, refetch } = useUserInfoQuery(undefined);
   const [logout, { isLoading: isLoggingOut }] = useLogoutMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -234,12 +241,13 @@ export default function Navbar() {
 
       // Redirect to home page
       navigate("/");
+      window.location.reload();
     } catch (error) {
       console.error("Logout failed:", error);
     }
   };
 
-  const shouldShowLink = (link) => {
+  const shouldShowLink = (link: link) => {
     if (link.role === "PUBLIC") return true;
     if (link.roles) {
       return link.roles.includes(data?.data?.role);

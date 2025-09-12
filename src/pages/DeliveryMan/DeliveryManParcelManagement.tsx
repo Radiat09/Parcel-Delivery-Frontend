@@ -1,5 +1,4 @@
 import Loading from "@/components/Loading";
-import { ParcelDetailsDialog } from "@/components/Parcel/ParcelDetailsDialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -38,25 +37,17 @@ import {
   useUpdateParcelMutation,
 } from "@/redux/features/parcel/parcel.api";
 import type { IParcel, TParcelStatus } from "@/types/parcel.type";
-import { getChangedFieldsEnhanced } from "@/utils/getChangedFields";
 import { getStatusVariant } from "@/utils/getStatus";
-import { Eye, MoreHorizontal, Package, RotateCw, Search } from "lucide-react";
-import { useState } from "react";
+import { MoreHorizontal, Package, RotateCw, Search } from "lucide-react";
 import { useSearchParams } from "react-router";
 
 // Delivery man can only update these three statuses
 const deliveryManStatusArray = ["PICKED", "IN_TRANSIT", "DELIVERED"];
 
 export default function DeliveryManParcelManagement() {
-  const [editedParcel, setEditedParcel] = useState<Partial<IParcel> | null>(
-    null
-  );
   const [searchParams, setSearchParams] = useSearchParams();
   const searchTerm = searchParams.get("searchTerm") || undefined;
   const currentStatus = searchParams.get("currentStatus") || undefined;
-
-  const [viewDetails, setViewDetails] = useState(false);
-  const [viewParcel, setViewParcel] = useState<IParcel | null>(null);
 
   const { data, isLoading, error } = useGetAllParcelsQuery({
     searchTerm,
@@ -96,20 +87,6 @@ export default function DeliveryManParcelManagement() {
 
   const parcelUpdater = async (trkId: string, data: Partial<IParcel>) => {
     await parcelUpdateHandler({ trkId, data });
-  };
-
-  const handleOnUpdateParcel = async () => {
-    if (editedParcel && viewParcel) {
-      const changes = getChangedFieldsEnhanced(viewParcel, editedParcel);
-
-      const trkId = viewParcel.trackingId;
-      const data = { ...changes };
-
-      // Only proceed if there are actual changes
-      if (Object.keys(changes)?.length > 0) {
-        await parcelUpdater(trkId, data);
-      }
-    }
   };
 
   // Filter parcels to only show those that delivery man can work with
@@ -219,15 +196,6 @@ export default function DeliveryManParcelManagement() {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
-                      <DropdownMenuItem
-                        onClick={() => {
-                          setViewParcel(parcel);
-                          setViewDetails(true);
-                        }}
-                      >
-                        <Eye className="mr-2 h-4 w-4" />
-                        View Details
-                      </DropdownMenuItem>
                       <DropdownMenuSeparator />
                       {deliveryManStatusArray.map((status, i) => (
                         <DropdownMenuItem
@@ -329,15 +297,6 @@ export default function DeliveryManParcelManagement() {
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem
-                              onClick={() => {
-                                setViewParcel(parcel);
-                                setViewDetails(true);
-                              }}
-                            >
-                              <Eye className="mr-2 h-4 w-4" />
-                              View Details
-                            </DropdownMenuItem>
                             <DropdownMenuSeparator />
                             {deliveryManStatusArray.map((status, i) => (
                               <DropdownMenuItem
@@ -370,17 +329,6 @@ export default function DeliveryManParcelManagement() {
           </div>
         </CardContent>
       </Card>
-      <ParcelDetailsDialog
-        editedParcel={editedParcel}
-        setEditedParcel={setEditedParcel}
-        onOpenChange={() => setViewDetails(!viewDetails)}
-        open={viewDetails}
-        onUpdateParcel={handleOnUpdateParcel}
-        parcel={viewParcel}
-        isLoading={isUpdateParcelLoading}
-        // Only allow editing status for the permitted statuses
-        allowedStatuses={deliveryManStatusArray}
-      />
     </>
   );
 }
